@@ -4,6 +4,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | PDO Fetch Style
+    |--------------------------------------------------------------------------
+    |
+    | By default, database results will be returned as instances of the PHP
+    | stdClass object; however, you may desire to retrieve records in an
+    | array format for simplicity. Here you can tweak the fetch style.
+    |
+    */
+
+    'fetch' => PDO::FETCH_OBJ,
+
+    /*
+    |--------------------------------------------------------------------------
     | Default Database Connection Name
     |--------------------------------------------------------------------------
     |
@@ -33,38 +46,32 @@ return [
 
     'connections' => [
 
-        'sqlite' => [
-            'driver' => 'sqlite',
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
-            'prefix' => '',
-        ],
-
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'host' => env('DB_HOST', 'eu-cdbr-west-01.cleardb.com'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
+            'database' => env('DB_DATABASE', 'heroku_04b15b6cf8bc548'),
+            'username' => env('DB_USERNAME', 'bca19ad87421e1'),
+            'password' => env('DB_PASSWORD', 'bc469405'),
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
             'prefix' => '',
             'strict' => true,
             'engine' => null,
         ],
 
-        'pgsql' => [
-            'driver' => 'pgsql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+        'mysql-production' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST', 'eu-cdbr-west-01.cleardb.com'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('DB_DATABASE', 'heroku_720f7f96aceaf6d'),
+            'username' => env('DB_USERNAME', 'b4e50aff3a7941'),
+            'password' => env('DB_PASSWORD', '557aa619'),
             'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
             'prefix' => '',
-            'schema' => 'public',
-            'sslmode' => 'prefer',
+            'strict' => true,
+            'engine' => null,
         ],
 
     ],
@@ -95,15 +102,14 @@ return [
 
     'redis' => [
 
-        'client' => 'predis',
+        'cluster' => false,
 
         'default' => [
-            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'host' => env('REDIS_HOST', 'localhost'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', 6379),
             'database' => 0,
         ],
 
     ],
-
 ];

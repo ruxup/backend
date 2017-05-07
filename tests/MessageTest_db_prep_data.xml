@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+
+<dataset>
+    <table name="messages">
+        <column>id</column>
+        <column>description</column>
+		<column>time_send</column>
+		<column>owner_id</column>
+		<column>event_id</column>
+		<column>deleted_at</column>
+		<column>active</column>
+        <row>
+            <value>1</value>
+            <value>Hello buddy! PSV!</value>
+			<value>2017-12-14 14:50:32</value>
+			<value>1</value>
+			<value>24</value>
+			<null />
+			<value>1</value>
+        </row>
+    </table>
+</dataset>
