@@ -16,8 +16,8 @@ class EditController extends Controller
         return Validator::make($data, [
             'name' => 'max:255',
             'email' => 'email|max:255|unique:users',
-            'password' => 'min:6|confirmed',
             'nationality' => 'max:30',
+            'gender' => 'min:1|max:1|required',
             'bio' => 'max:255',
             'location' => 'max:50',
             'phone' => 'regex:/(\+)[0-9]{9,}/'
@@ -33,8 +33,7 @@ class EditController extends Controller
 
     public function UpdateProfile(Request $request, $id)
     {
-        $userData = $request->only('name', 'email', 'password', 'nationality', 'bio', 'location', 'profile_pic', 'phone');
-        $this->checkIfNull($userData, 'password');
+        $userData = $request->only('name', 'email', 'gender', 'nationality', 'bio', 'location', 'profile_pic', 'phone');
         $this->checkIfNull($userData, 'email');
 
         $validate = $this->validator($userData);
@@ -61,8 +60,8 @@ class EditController extends Controller
         if (in_array('email', $userData)) {
             $user->email = (string)$userData['email'];
         }
-        if (in_array('password', $userData)) {
-            $user->password = (string)$userData['password'];
+        if (!is_null($userData['gender'])) {
+            $user->gender = $userData['gender'];
         }
         if (!is_null($userData['nationality'])) {
             $user->nationality = (string)$userData['nationality'];
@@ -76,6 +75,7 @@ class EditController extends Controller
         if (!is_null($userData['phone'])) {
             $user->phone = (string)$userData['phone'];
         }
+
         $user->save();
 
         return response()->json(["message" => "Profile was successfully updated"], 200);

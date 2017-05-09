@@ -3,7 +3,7 @@
 <dataset>
     <table name="messages">
         <column>id</column>
-        <column>description</column>
+        <column>content</column>
 		<column>time_send</column>
 		<column>owner_id</column>
 		<column>event_id</column>

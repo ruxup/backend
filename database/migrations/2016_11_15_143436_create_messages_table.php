@@ -15,7 +15,7 @@ class CreateMessagesTable extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('description');
+            $table->text('content');
             $table->timestamp('time_sent')->nullable();
             $table->integer('owner_id')->unsigned()->index();
             $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');

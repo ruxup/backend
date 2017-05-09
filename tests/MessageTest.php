@@ -4,6 +4,8 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\ExampleExtension\TestCaseTrait;
 
 
@@ -33,21 +35,22 @@ class MessageTest extends TestCase
     public function test_comment(){
 
         $data = [
-            'description' => 'First message',
-            'time_sent' => Carbon::parse('2016-12-14 14:50:32')->format('Y-m-d H:i:s'),
+            'content' => 'First message',
             'owner_id' => 2,
-            'event_id' => 25
+            'event_id' => 25,
+            'time_sent' => Carbon::now()->format('Y-m-d H:i:s'),
         ];
         $this->json('POST', "api/messages", $data)->seeStatusCode(200)->decodeResponseJson();
     }
 
     public function test_delete(){
-        $response = $this->call('DELETE', "api/messages/1/1");
-//
-//        print "$response";
+        $lastMessage = DB::table(config('constants.messages_table'))->orderBy('time_sent', 'desc')->first();
+        if(is_null($lastMessage))
+        {
+            $this->markTestSkipped('This test is skipped due to no message being available');
+        }
+        $response = $this->call('DELETE', "api/messages/". $lastMessage->id ."/". $lastMessage->owner_id);
         $this->assertEquals(200 , $response->getStatusCode());
-
-//        $this->assertEquals('200 User with id 44 deleted comment with id 24', $response->status() . ' ' . $response->getContent());
     }
 
     public function test_edit(){

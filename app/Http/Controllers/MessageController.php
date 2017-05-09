@@ -15,7 +15,7 @@ class MessageController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'description' => 'required|max:255',
+            'content' => 'required|max:255',
             'time_sent' => 'required|date_format:Y-m-d H:i:s',
             'event_id' => 'required|integer',
             'owner_id' => 'required|integer',
@@ -24,7 +24,7 @@ class MessageController extends Controller
 
     public function comment(Request $request)
     {
-        $messageData = $request->only('description', 'time_sent', 'owner_id', 'event_id');
+        $messageData = $request->only('content', 'time_sent', 'owner_id', 'event_id');
 
         $owner = $messageData['owner_id'];
         $event = $messageData['event_id'];
@@ -70,7 +70,7 @@ class MessageController extends Controller
                 {
                     return response('No new content has been found', 404);
                 }
-                $message->description = (string)$newContent;
+                $message->content = (string)$newContent;
                 $message->time_sent = Carbon::now();
                 $message->save();
                 return response("Message has been successfully edited", 200);
