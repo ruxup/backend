@@ -1,4 +1,14 @@
 {
+<<<<<<< HEAD
+    "require": {
+        "ext-mbstring": "*",
+        "phpunit/phpunit": "^5.7"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "cd backend && composer update"
+        ]
+=======
     "name": "laravel/laravel",
     "description": "The Laravel Framework.",
     "keywords": ["framework", "laravel"],
@@ -54,5 +64,6 @@
         "preferred-install": "dist",
         "process-timeout": 0,
         "disable-tls": true
+>>>>>>> 76551340b8ba2d69bcce08c03939e7ca59aee22f
     }
 }

@@ -1,0 +1,22 @@
+/node_modules
+<<<<<<< HEAD
+/public/storage
+/vendor
+/.idea
+.env
+Homestead.json
+Homestead.yaml
+composer.lock
+composer.json
+=======
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+/.idea
+/.vagrant
+Homestead.json
+Homestead.yaml
+npm-debug.log
+.env
+>>>>>>> 76551340b8ba2d69bcce08c03939e7ca59aee22f
