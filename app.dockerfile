@@ -22,5 +22,5 @@ ADD . /var/www/
 
 # Bundle app source
 COPY . /var/www/
-
-RUN composer update
+RUN docker-php-ext-install mbstring
+RUN composer install
