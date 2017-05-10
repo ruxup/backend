@@ -1,0 +1,2 @@
+bash remove_credentials_db.bash
+pause

@@ -1,0 +1,15 @@
+check your .env file (/backend):
+DB_CONNECTION=mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=localruxupdb
+DB_USERNAME=root
+DB_PASSWORD=root
+
+you should have this.
+
+if everything is ok, open cmd in /backend folder and run:
+1. php artisan migrate
+2. php artisan db:seed
+
+Enjoy!

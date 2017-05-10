@@ -1,0 +1,2 @@
+https://dev.mysql.com/downloads/installer/  - Install Workbench and Server. Set username and password to "root" and port "3306" when installing Server.
+set PATH to 'C:\Program Files\MySQL\MySQL Server <Version>\bin'
