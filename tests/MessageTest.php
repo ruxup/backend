@@ -32,7 +32,8 @@ class MessageTest extends TestCase
      *
      * @return void
      */
-    public function test_comment(){
+    public function test_comment()
+    {
 
         $data = [
             'content' => 'First message',
@@ -40,20 +41,21 @@ class MessageTest extends TestCase
             'event_id' => 25,
             'time_sent' => Carbon::now()->format('Y-m-d H:i:s'),
         ];
-        $this->json('POST', "api/messages", $data)->seeStatusCode(200)->decodeResponseJson();
+        $this->json('POST', "api/messages", $data)->assertStatus(200)->decodeResponseJson();
     }
 
-    public function test_delete(){
+    public function test_delete()
+    {
         $lastMessage = DB::table(config('constants.messages_table'))->orderBy('time_sent', 'desc')->first();
-        if(is_null($lastMessage))
-        {
+        if (is_null($lastMessage)) {
             $this->markTestSkipped('This test is skipped due to no message being available');
         }
-        $response = $this->call('DELETE', "api/messages/". $lastMessage->id ."/". $lastMessage->owner_id);
-        $this->assertEquals(200 , $response->getStatusCode());
+        $response = $this->call('DELETE', "api/messages/" . $lastMessage->id . "/" . $lastMessage->owner_id);
+        $response->assertStatus(200);
     }
 
-    public function test_edit(){
+    public function test_edit()
+    {
         //TODO
     }
 }

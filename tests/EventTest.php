@@ -35,12 +35,12 @@ class EventTest extends TestCase
             'owner_id' => '4'
         ];
         $response = $this->call('POST', "api/event", $data);
-        $this->assertEquals('201', $response->status());
+        $response->assertStatus(201);
     }
 
     public function test_get_users()
     {
-        $this->json('GET', "api/event/24/members")->seeStatusCode(200)->decodeResponseJson();
+        $this->json('GET', "api/event/24/members")->assertStatus(200)->decodeResponseJson();
     }
 
     public function test_update_event()
@@ -55,17 +55,17 @@ class EventTest extends TestCase
             'owner_id' => '4'
         ];
         $response = $this->call('PUT', "api/event/24/update", $data);
-        $this->assertEquals('200 Event updated successfully', $response->status() . ' ' . $response->getContent());
+        $response->assertStatus(200);
     }
 
     public function test_get_all_events()
     {
-        $this->json('GET', "api/events/0/ASC")->seeStatusCode(200)->decodeResponseJson();
+        $this->json('GET', "api/events/0/ASC")->assertStatus(200)->decodeResponseJson();
     }
 
     public function test_leave_event()
     {
         $response = $this->call('DELETE', "api/event/25/2");
-        $this->assertEquals('200 User with id 2 left event with id 25', $response->status() . ' ' . $response->getContent());
+        $response->assertStatus(200);
     }
 }
