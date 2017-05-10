@@ -6,19 +6,20 @@
     "type": "project",
     "require": {
         "php": ">=5.6.4",
-        "laravel/framework": "5.3.*",
+        "laravel/framework": "5.4.*",
         "laravelcollective/html": "^5.2.0",
         "firebase/php-jwt": "^4.0",
         "tymon/jwt-auth": "^0.5.9",
         "fzaninotto/faker": "^1.6",
         "intervention/image": "^2.3",
         "zircote/swagger-php": "^2.0",
-        "ext-mbstring": "*",
-		"phpunit/phpunit": "^5.7"
+        "ext-mbstring": "*",		
+		"laravel/tinker": "~1.0"
     },
     "require-dev": {
         "mockery/mockery": "0.9.*",
         "symfony/css-selector": "3.1.*",
+		"phpunit/phpunit": "^5.7",
         "symfony/dom-crawler": "3.1.*"
     },
     "autoload": {
@@ -30,9 +31,9 @@
         }
     },
     "autoload-dev": {
-        "classmap": [
-            "tests/TestCase.php"
-        ]
+        "psr-4": {
+            "Tests\\": "tests/TestCase.php"
+        }
     },
     "scripts": {
         "post-root-package-install": [
@@ -43,7 +44,6 @@
         ],
         "post-install-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
-			"composer update",
             "php artisan optimize"
         ],
         "post-update-cmd": [
@@ -53,7 +53,9 @@
     },
     "config": {
         "preferred-install": "dist",
+		"sort-packages": true,
+		"optimize-autoloader": true,
         "process-timeout": 0,
-        "disable-tls": true
+        "disable-tls": false
     }
 }
