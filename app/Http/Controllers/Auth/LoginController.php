@@ -65,7 +65,7 @@ class LoginController extends Controller
             return response()->json(['error' => $exception->getModel() . ' not found'], 404);
         }
         $arrayToReturn = array(['token' => $token, 'user_id' => $user->id]);
-        return response()->json($arrayToReturn);
+        return response()->json($arrayToReturn, 200);
     }
 
     // Get the user data
@@ -95,7 +95,7 @@ class LoginController extends Controller
         }
 
         // the token is valid and we have found the user via the sub claim
-        return response()->json(compact('user'));
+        return response()->json(compact('user'), 200);
     }
 
     public function logout()
@@ -105,7 +105,7 @@ class LoginController extends Controller
             if(isset($_SERVER['HTTP_TOKEN']))
             {
                 JWTAuth::setToken($_SERVER['HTTP_TOKEN'])->invalidate();
-                return response("user_logged_out", 200);
+                return response()->json(["message" => "user has been logged out."], 200);
             }
 
         } catch (TokenExpiredException $e) {
@@ -123,6 +123,6 @@ class LoginController extends Controller
         }
 
         // the token is valid and we have found the user via the sub claim
-        return response('token_not_found', 404);
+        return response()->json(["error message" => 'Token not found.'], 404);
     }
 }

@@ -20,15 +20,15 @@ class InterestsController extends Controller
             $interest = Interest::findOrFail($interestId);
 
             InterestUser::create(['user_id' => $userId, 'interest_id' => $interestId]);
-            return response('Interest: '. $interest->name .' linked to user: ' . $user->name, 200);
+            return response()->json(['message' => 'Interest: '. $interest->name .' linked to user: ' . $user->name], 200);
         }
         catch (ModelNotFoundException $exception)
         {
-            return response($exception->getModel() . ' Not found.', 404);
+            return response()->json(['error message' => $exception->getModel() . ' Not found.'], 404);
         }
         catch (QueryException $exception)
         {
-            return response($exception->getMessage(), 403);
+            return response()->json(['error message' => $exception->getMessage()], 403);
         }
 
     }
@@ -37,9 +37,9 @@ class InterestsController extends Controller
     {
         $interest = InterestUser::withTrashed()->where('user_id', $userId)->where('interest_id', $interestId)->first();
         if (is_null($interest)) {
-            return response('(user,interest) pair do not match', 404);
+            return response()->json(['error message' => '(user,interest) pair do not match'], 404);
         }
         InterestUser::withTrashed()->where('user_id', $userId)->where('interest_id', $interestId)->forceDelete();
-        return response("Interest has been removed", 200);
+        return response()->json(['message' => "Interest has been removed"], 200);
     }
 }

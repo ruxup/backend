@@ -79,12 +79,12 @@ class RegisterController extends Controller
                 return response($validate->failed(), 417);
             }
         } catch (ValidationException $ex) {
-            return response("validation_exception", $ex->getStatusCode());
+            return response()->json(["error message" => "validation_exception"], $ex->getStatusCode());
         }
 
         $user = $this->create($request->all());
         $user->save();
 
-        return response('registration_successful', 201);
+        return response()->json(["message" => 'registration_successful'], 201);
     }
 }

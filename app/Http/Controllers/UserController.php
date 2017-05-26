@@ -41,9 +41,9 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($id);
-            return response(json_encode(array("data" => $user->events)), 200);
+            return response()->json(['message' => array("data" => $user->events)], 200);
         } catch (ModelNotFoundException $exception) {
-            return response(json_encode(array("error message" => "User_Not_Found")), 404);
+            return response()->json(['message' => array("error message" => "User not found")], 404);
         }
     }
 
@@ -52,13 +52,13 @@ class UserController extends Controller
         try {
             User::findOrFail($id);
         } catch (ModelNotFoundException $e) {
-            return response("User_Not_Found", 404);
+            return response()->json(['error message' => "User not found"], 404);
         }
         $arrayEvents = DB::table(config('constants.events_table'))->where('owner_id', $id)->get();
         if (count($arrayEvents) == 0) {
-            return response("User is not an owner", 404);
+            return response()->json(['error message' => "User is not an owner"], 404);
         }
-        return response(json_encode($arrayEvents), 200);
+        return response()->json(['message' => $arrayEvents], 200);
 
     }
 
@@ -73,11 +73,11 @@ class UserController extends Controller
                 $event->owner_id = $user->id;
                 $event->save();
             }
-            return response('User ' . $user->name . ' has joined event ' . $event->name, 200);
+            return response()->json(['message' => 'User ' . $user->name . ' has joined event ' . $event->name], 200);
         } catch (ModelNotFoundException $exception) {
-            return response($exception->getModel() . ' not found', 404);
+            return response()->json(['error message' => $exception->getModel() . ' not found'], 404);
         } catch (QueryException $queryException) {
-            return response('User already is a member of this event', 409);
+            return response()->json(['error message' => 'User already is a member of this event'], 409);
         }
 
     }
@@ -100,9 +100,9 @@ class UserController extends Controller
             EventUser::where('user_id', $id)->delete();
             InterestUser::where('user_id', $id)->delete();
             Message::withTrashed()->where('owner_id', $id)->forceDelete();
-            return response("User: " . $user->name . " has been removed", 200);
+            return response()->json(['message' => "User: " . $user->name . " has been removed"], 200);
         } catch (ModelNotFoundException $exception) {
-            return response("User is not active", 404);
+            return response()->json(['error message' => "User is not active"], 404);
         }
     }
 
@@ -115,11 +115,11 @@ class UserController extends Controller
             EventUser::where('user_id', $id)->restore();
             InterestUser::where('user_id', $id)->restore();
             $user = User::findOrFail($id);
-            return response("User: " . $user->name . " has been restored", 200);
+            return response()->json(['message' => "User: " . $user->name . " has been restored"], 200);
         } catch (\ErrorException $exception) {
-            return response("User is active.", 404);
+            return response()->json(['error message' => "User is active."], 404);
         } catch (ModelNotFoundException $exception) {
-            return response("User not found", 404);
+            return response()->json(['error message' => "User not found"], 404);
         }
     }
 
@@ -129,21 +129,21 @@ class UserController extends Controller
             $currentOwner = User::findOrFail($request->input('owner_id'));
             $user = User::findOrFail($request->input('user_id'));
             if ($currentOwner->id == $user->id) {
-                return response('Current user is already the owner of this event.', 400);
+                return response()->json(['error message' => 'Current user is already the owner of this event.'], 400);
             }
             $event = Event::findOrFail($id);
             if ($currentOwner->id != $event->owner_id) {
-                return response('Access denied.', 403);
+                return response()->json(['error message' => 'Access denied.'], 403);
             }
             $flag = $this->checkIfUserIsMember($user, $event);
             if (!$flag) {
-                return response('User to be owner is not member of this event.', 400);
+                return response()->json(['error message' => 'User to be owner is not member of this event.'], 400);
             }
             $event->owner_id = $user->id;
             $event->save();
-            return response('Event: ' . $event->name . " new owner's is: " . $user->name, 200);
+            return response()->json(['message' => 'Event: ' . $event->name . " new owner's is: " . $user->name], 200);
         } catch (ModelNotFoundException $exception) {
-            return response($exception->getModel() . ' not found.', 404);
+            return response()->json(['error message' => $exception->getModel() . ' not found.'], 404);
         }
 
     }

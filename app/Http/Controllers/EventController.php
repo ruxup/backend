@@ -35,7 +35,7 @@ class EventController extends Controller
         ], $messages);
     }
 
-    public function getEvent($id)
+    public function getEvent($id) //finish this
     {
         return $id;
     }
@@ -68,7 +68,7 @@ class EventController extends Controller
             if (!is_null($elementToRemove)) {
                 $this->removeUserFromEvent($userId, $eventId);
             } else {
-                return response('User with id ' . $userId . ' is not member of event with id ' . $eventId, 404);
+                return response()->json(['error message' => 'User with id ' . $userId . ' is not member of event with id ' . $eventId], 404);
             }
 
             if ($flag) {
@@ -82,7 +82,7 @@ class EventController extends Controller
                 $event->save();
             }
 
-            return response('User with id ' . $userId . ' left event with id ' . $eventId, 200);
+            return response()->json(['message' => 'User with id ' . $userId . ' left event with id ' . $eventId], 200);
 
         } catch (ModelNotFoundException $exception) {
             return response('Event_not_found', 404);
@@ -97,9 +97,9 @@ class EventController extends Controller
     {
         try {
             $event = Event::findOrFail($id);
-            return response(json_encode($event->users), 200);
+            return response()->json(['message' => $event->users], 200);
         } catch (ModelNotFoundException $exception) {
-            return response('Event_not_found', 404);
+            return response()->json(['error message' => 'Event not found.'], 404);
         }
     }
 
@@ -123,35 +123,35 @@ class EventController extends Controller
             $this->updateColumn($event, 'category', $category);
             $event->save();
         } catch (QueryException $e) {
-            return response($e->getMessage(), 400);
+            return response()->json(['error message' => $e->getMessage()], 400);
         }
-        return response("Event updated successfully", 200);
+        return response()->json(['message' => "Event updated successfully"], 200);
     }
 
     public function getAllEvents($columnNr, $orderType)
     {
         try {
             if ($orderType != 'DESC' && $orderType != 'ASC') {
-                return response('wrong orderType parameter', 406);
+                return response()->json(['error message' => 'wrong orderType parameter'], 406);
             }
 
             $allColumns = Event::getTableColumns();
             if ($columnNr > count($allColumns) - 1) {
-                return response('The column index is not valid', 400);
+                return response()->json(['error message' => 'The column index is not valid'], 400);
             }
             $column = $allColumns[$columnNr];
 
             if (Schema::hasColumn('events', $column)) {
                 $events = Event::orderBy($column, $orderType)->get();
                 if ($events->count() != 0) {
-                    return response($events, 200);
+                    return response()->json($events, 200);
                 }
-                return response('There are no events', 404);
+                return response()->json(['error message' => 'There are no events'], 404);
             } else {
-                return response('The column specified does not exist within events table', 406);
+                return response()->json(['error message' => 'The column specified does not exist within events table'], 406);
             }
         } catch (QueryException $e) {
-            return response($e->getMessage(), 400);
+            return response()->json(['error message' => $e->getMessage()], 400);
         }
     }
 
@@ -162,9 +162,9 @@ class EventController extends Controller
             $event->delete();
             EventUser::withTrashed()->where('event_id', $id)->update(['active' => false]);
             Message::withTrashed()->where('event_id', $id)->update(['active' => false]);
-            return response("Event: " . $event->name . " has been removed", 200);
+            return response()->json(['message' => "Event: " . $event->name . " has been removed"], 200);
         } catch (ModelNotFoundException $exception) {
-            return response("Event is not active", 404);
+            return response()->json(['message' => "Event is not active"], 404);
         }
     }
 
@@ -177,11 +177,11 @@ class EventController extends Controller
             EventUser::withTrashed()->where('event_id', $id)->update(['active' => true]);
             Message::withTrashed()->where('event_id', $id)->update(['active' => true]);
             $event = Event::findOrFail($id);
-            return response("Event: " . $event->name . " has been restored", 200);
+            return response()->json(['message' => "Event: " . $event->name . " has been restored"], 200);
         } catch (\ErrorException $exception) {
-            return response("Event is active.", 404);
+            return response()->json(['error message' => "Event is active."], 404);
         } catch (ModelNotFoundException $exception) {
-            return response("Event not found", 404);
+            return response()->json(['error message' => "Event not found"], 404);
         }
     }
 
@@ -195,9 +195,9 @@ class EventController extends Controller
             $user = User::find($userId);
             $event = Event::find($eventId);
             EventUser::where('event_id', $eventId)->where('user_id', $userId)->forceDelete();
-            return response('User ' . $user->name . ' has been removed from event ' . $event->name, 200);
+            return response()->json(['message' => 'User ' . $user->name . ' has been removed from event ' . $event->name], 200);
         } catch (ModelNotFoundException $exception) {
-            return response($exception->getModel() . ' not found.', 404);
+            return response()->json(['error message' => $exception->getModel() . ' not found.'], 404);
         }
     }
 

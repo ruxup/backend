@@ -35,13 +35,13 @@ class MessageController extends Controller
 
             $validate = $this->validator($messageData);
             if ($validate->fails()) {
-                return response($validate->errors(), 417);
+                return response()->json(['error message' => $validate->errors()], 417);
             } else {
                 Message::create($messageData);
-                return response(json_encode('Comment added from user with id ' . $owner . ' to event with id ' . $event), 200);
+                return response()->json(['message' => 'Comment added from user with id ' . $owner . ' to event with id ' . $event], 200);
             }
         } else {
-            return response('Comment could not be added. User not member of the event.', 404);
+            return response()->json(['error message' => 'Comment could not be added. User not member of the event.'], 404);
         }
 
     }
@@ -52,11 +52,11 @@ class MessageController extends Controller
             $message = Message::findOrFail($id);
             if ($message->owner_id == $owner_id) {
                 $message->delete();
-                return response("Message has been removed", 200);
+                return response()->json(['message' => "Message has been removed"], 200);
             }
-            return response("The current user is not the sender of this message", 403);
+            return response()->json(['error message' => "The current user is not the sender of this message"], 403);
         } catch (ModelNotFoundException $exception) {
-            return response('Message not found', 404);
+            return response()->json(['error message' => 'Message not found'], 404);
         }
     }
 
@@ -68,16 +68,16 @@ class MessageController extends Controller
                 $newContent = $request->input('content');
                 if(is_null($newContent))
                 {
-                    return response('No new content has been found', 404);
+                    return response()->json(['error message' => 'No new content has been found'], 404);
                 }
                 $message->content = (string)$newContent;
                 $message->time_sent = Carbon::now();
                 $message->save();
-                return response("Message has been successfully edited", 200);
+                return response()->json(['message' => "Message has been successfully edited"], 200);
             }
-            return response("The current user is not the sender of this message", 403);
+            return response()->json(['error message' => "The current user is not the sender of this message"], 403);
         } catch (ModelNotFoundException $exception) {
-            return response('Message not found', 404);
+            return response()->json(['error message' => 'Message not found'], 404);
         }
     }
 }

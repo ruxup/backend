@@ -55,12 +55,17 @@ Route::group(['prefix' => 'interests'], function () {
 });
 
 //handle update - see image; //handle images ->load images
-//Change all responses to json;
 
 //shorter address for api calls.
 //swagger
 //handle report user
-//Setup ruxup email.
+
+
+
+
+
+
+//Setup ruxup email. (? - FE)
 
 //handle invite another user to join event. - for Version 2.0
 //handle pending/accept when user wants to join an event. - for Version 2.0
