@@ -53,19 +53,19 @@ class LoginController extends Controller
             $user = User::where('email', $credentials['email'])->first();
             if(!$token = JWTAuth::attempt($credentials))
             {
-                return response()->json(['error' => 'invalid credentials'], 401);
+                return response()->json(['error message' => 'invalid credentials'], 401);
             }
         }
         catch (JWTException $exc)
         {
-            return response()->json(['error' => 'could not create token'], 500);
+            return response()->json(['error message' => 'could not create token'], 500);
         }
         catch (ModelNotFoundException $exception)
         {
-            return response()->json(['error' => $exception->getModel() . ' not found'], 404);
+            return response()->json(['error message' => $exception->getModel() . ' not found'], 404);
         }
         $arrayToReturn = array(['token' => $token, 'user_id' => $user->id]);
-        return response()->json($arrayToReturn, 200);
+        return response()->json(['message' => $arrayToReturn], 200);
     }
 
     // Get the user data
@@ -74,24 +74,24 @@ class LoginController extends Controller
         try {
             if(!isset($_SERVER['HTTP_TOKEN']))
             {
-                return response("token_not_set", 401);
+                return response()->json(['error message' => "token not set"], 401);
             }
 
             if (! $user = JWTAuth::setToken($_SERVER['HTTP_TOKEN'])->authenticate()) {
-                return response("user_not_found", 404);
+                return response()->json(['error message' => "user not found"], 404);
             }
 
         } catch (TokenExpiredException $e) {
 
-            return response('token_expired', $e->getStatusCode());
+            return response()->json(['error message' => 'token expired'], $e->getStatusCode());
 
         } catch (TokenInvalidException $e) {
 
-            return response('token_invalid', $e->getStatusCode());
+            return response()->json(['error message' => 'token invalid'], $e->getStatusCode());
 
         } catch (JWTException $e) {
 
-            return response('token_absent', $e->getStatusCode());
+            return response()->json(['error message' => 'token absent'], $e->getStatusCode());
         }
 
         // the token is valid and we have found the user via the sub claim
@@ -110,15 +110,15 @@ class LoginController extends Controller
 
         } catch (TokenExpiredException $e) {
 
-            return response("token_expired", $e->getStatusCode());
+            return response()->json(['error message' => "token expired"], $e->getStatusCode());
 
         } catch (TokenInvalidException $e) {
 
-            return response('token_invalid', $e->getStatusCode());
+            return response()->json(['error message' => 'token invalid'], $e->getStatusCode());
 
         } catch (JWTException $e) {
 
-            return response('token_absent', $e->getStatusCode());
+            return response()->json(['error message' => 'token absent'], $e->getStatusCode());
 
         }
 

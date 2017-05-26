@@ -12,4 +12,7 @@ RewriteRule ^(.*)$ $1 [R=200,L]
 
 # Rewrite --- https://ruxup.herokuapp.com/backend/public/ => https://ruxup.herokuapp.com/admin/
 
-RewriteEngine On
+<IfModule mod_rewrite.c>
+   RewriteEngine On
+   RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
