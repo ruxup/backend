@@ -73,8 +73,8 @@ class EventController extends Controller
 
             if ($flag) {
                 $event = Event::find($eventId);
-                $usersInEvent = json_decode($this->getUsers($eventId)->getContent(), true);
-                if (count($usersInEvent) == 0) {
+                $usersInEvent = json_decode($this->getUsers($eventId), true);
+                if (count($usersInEvent[0]) == null) {
                     $event->owner_id = null;
                 } else {
                     $event->owner_id = $usersInEvent[0]['id'];
@@ -85,11 +85,11 @@ class EventController extends Controller
             return response()->json(['message' => 'User with id ' . $userId . ' left event with id ' . $eventId], 200);
 
         } catch (ModelNotFoundException $exception) {
-            return response('Event_not_found', 404);
+            return response('Event not found', 404);
         } catch (FatalErrorException $exception) {
-            return response('Event_not_found', 404);
+            return response('Event not found', 404);
         } catch (QueryException $exception) {
-            return response('Event_not_found', 404);
+            return response('Event not found', 404);
         }
     }
 
