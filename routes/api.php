@@ -55,8 +55,6 @@ Route::group(['prefix' => 'interests'], function () {
 });
 
 //handle update - see image; //handle images ->load images
-
-//shorter address for api calls.
 //swagger
 //handle report user
 

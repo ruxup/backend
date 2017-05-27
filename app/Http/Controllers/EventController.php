@@ -66,30 +66,30 @@ class EventController extends Controller
             $elementToRemove = $this->checkIfUserIsMemberOfEvent($userId, $eventId);
             $flag = $this->checkIfUserIsOwnerOfEvent($userId, $eventId);
             if (!is_null($elementToRemove)) {
-                $this->removeUserFromEvent($userId, $eventId);
+                if ($flag) {
+                    $usersInEvent = $this->getUsers($eventId)->getData();
+                    if (count($usersInEvent->message) == 1) {
+                        $this->removeUserFromEvent($userId, $eventId);
+                        $this->removeEvent($eventId);
+                        return response()->json(['message' => 'User with id ' . $userId . ' left event with id ' . $eventId], 200);
+                    } else {
+                        return response()->json(['error message' => 'User is owner of event. he is not allowed to leave until he is the only member of this event.'], 405);
+                    }
+                } else {
+                    $this->removeUserFromEvent($userId, $eventId);
+                    return response()->json(['message' => 'User with id ' . $userId . ' left event with id ' . $eventId], 200);
+                }
+
             } else {
                 return response()->json(['error message' => 'User with id ' . $userId . ' is not member of event with id ' . $eventId], 404);
             }
 
-            if ($flag) {
-                $event = Event::find($eventId);
-                $usersInEvent = json_decode($this->getUsers($eventId), true);
-                if (count($usersInEvent[0]) == null) {
-                    $event->owner_id = null;
-                } else {
-                    $event->owner_id = $usersInEvent[0]['id'];
-                }
-                $event->save();
-            }
-
-            return response()->json(['message' => 'User with id ' . $userId . ' left event with id ' . $eventId], 200);
-
         } catch (ModelNotFoundException $exception) {
-            return response('Event not found', 404);
+            return response()->json(['error message' => 'Event not found'], 404);
         } catch (FatalErrorException $exception) {
-            return response('Event not found', 404);
+            return response()->json(['error message' => 'Event not found'], 404);
         } catch (QueryException $exception) {
-            return response('Event not found', 404);
+            return response()->json(['error message' => 'Event not found'], 404);
         }
     }
 

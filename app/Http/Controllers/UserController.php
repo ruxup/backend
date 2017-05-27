@@ -167,11 +167,8 @@ class UserController extends Controller
         $endTime = $request->input('end_time');
         $category = $request->input('category');
         switch ($searchType) {
-            case 'time':
-                return DB::table(config('constants.events_table'))->whereBetween('start_time', [$startTime, $endTime])->get();
-                break;
             case 'location':
-                return DB::table(config('constants.events_table'))->where('location', $location)->get();
+                return DB::table(config('constants.events_table'))->whereBetween('start_time', [$startTime, $endTime])->where('location', $location)->get();
                 break;
             case 'category':
                 return DB::table(config('constants.events_table'))->where('category', $category)->get();
